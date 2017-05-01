@@ -1,0 +1,33 @@
+0.0.0.0
+
+root public
+gzip
+
+basicauth /cms admin password
+basicauth /admin admin password
+
+hugo . /cms
+
+# Limit clients to 10 requests per second (bursts of 12) to any resources in /:
+ratelimit / 10 12 second
+
+# Filter a specific IP or a CIDR range
+#ipfilter /admin /cms {
+#	rule allow
+#	ip 127.0.0.1
+#}
+
+# file manager
+filemanager /admin
+
+log /var/log/caddy/access.log {
+	rotate_size 50 # Rotate after 50 MB
+	rotate_age  90 # Keep rotated files for 90 days
+	rotate_keep 20 # Keep at most 20 log files
+}
+
+errors /var/log/caddy/error.log {
+	rotate_size 50
+	rotate_age  90
+	rotate_keep 20
+}
